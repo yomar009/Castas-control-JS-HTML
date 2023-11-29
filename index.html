@@ -2,93 +2,48 @@
 <html>
 <head>
     <title>Registro de Muestras</title>
+    <link rel="stylesheet" type="text/css" href="styles.css"> <!-- Enlace a tu archivo CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Registro de Muestras</h1>
-    
-    <p>Por favor, ingresa el número de muestras (N) y el número de muestras tomadas (M).</p>
-    
-    <label for="n">Número de columnas (N): </label>
-    <input type="number" id="n"><br><br>
-    
-    <label for="m">Número de filas (M): </label>
-    <input type="number" id="m"><br><br>
-    
-    <button onclick="crearTabla()">Crear Tabla</button>
-    
-    <div id="tabla-container"></div>
-    
-    <button onclick="guardarDatos()">Guardar Datos</button>
-    
-    <div id="resultado"></div>
-    
-    <script>
-        let datos = []; // Array para almacenar los datos
-        let promediosFila = []; // Array para almacenar los promedios de cada fila
-        let rangos = []; // Array para almacenar los rangos de cada fila
+    <h1>Cartas de control estadísticos</h1>
+    <div class="container">
+        <h2>Registro de Muestras</h2>
+        <p>Por favor, ingresa el número de muestras tomadas (M) y el número datos tomados (N).</p>
+        
+        <label for="m">Cantidad de Mustras (M): </label>
+        <input type="number" id="m"><br><br>
+        <label for="n">Número de Datos (N): </label>
+        <input type="number" id="n"><br><br>
 
-        function crearTabla() {
-            const n = parseInt(document.getElementById('n').value);
-            const m = parseInt(document.getElementById('m').value);
-            
-            if (isNaN(n) || isNaN(m)) {
-                alert('Por favor, ingresa números válidos para N y M.');
-                return;
-            }
-            
-            const tablaContainer = document.getElementById('tabla-container');
-            
-            // Crear la tabla
-            const tabla = document.createElement('table');
-            for (let i = 0; i < m; i++) {
-                const fila = document.createElement('tr');
-                for (let j = 0; j < n; j++) {
-                    const celda = document.createElement('td');
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    celda.appendChild(input);
-                    fila.appendChild(celda);
-                }
-                tabla.appendChild(fila);
-            }
-            
-            tablaContainer.innerHTML = ''; // Limpiar cualquier tabla anterior
-            tablaContainer.appendChild(tabla);
-        }
+        <button onclick="crearTabla()">Crear Tabla</button>
+        <div id="tabla-container" class="table-container"></div> <!-- Usar una clase CSS -->
 
-        function guardarDatos() {
-            const tabla = document.querySelector('table');
-            const filas = tabla.querySelectorAll('tr');
-            datos = []; // Reiniciar el array de datos
-            promediosFila = []; // Reiniciar el array de promedios de fila
-            rangos = []; // Reiniciar el array de rangos
+        <button onclick="guardarDatos()">Guardar Datos y Calcular</button>
+        <div id="resultado"></div>
+        <div id="resultadoCartas"></div>
 
-            filas.forEach((fila, i) => {
-                const celdas = fila.querySelectorAll('td');
-                datos[i] = []; // Crear un array para cada fila
-                celdas.forEach((celda, j) => {
-                    const input = celda.querySelector('input');
-                    const valor = parseFloat(input.value || 0); // Guardar el valor como número
-                    datos[i][j] = valor;
-                });
-                // Calcular el promedio de cada fila y guardarlos
-                const promedioFila = datos[i].reduce((total, valor) => total + valor, 0) / datos[i].length;
-                promediosFila.push(promedioFila);
-                
-                // Calcular el rango de cada fila y guardarlos
-                const max = Math.max(...datos[i]);
-                const min = Math.min(...datos[i]);
-                const rangoFila = max - min;
-                rangos.push(rangoFila);
-            });
-
-            // Calcular el promedio de los rangos
-            const promedioRangos = rangos.reduce((total, rango) => total + rango, 0) / rangos.length;
-
-            // Mostrar los datos en la página
-            const resultadoContainer = document.getElementById('resultado');
-            resultadoContainer.innerHTML = "Promedios de cada fila: " + JSON.stringify(promediosFila) + "<br>Rangos de cada fila: " + JSON.stringify(rangos) + "<br>Promedio de los rangos: " + promedioRangos;
-        }
-    </script>
+        <h2>Capacidad de Proceso</h2>
+        <label for="LSE">Ingresa (LSE) : </label>
+        <input type="number" id="LSE"><br><br>
+        <label for="LIE">Ingresa (LIE) : </label>
+        <input type="number" id="LIE"><br><br>
+        <button onclick="Capacidad()">Calcular Capacidad</button>
+        <div id="resultadoCapacidad"></div> 
+    </div>
+    <div class="container">
+        <h2>Gráfica de control</h2>
+        <button onclick="graficarCartas()">Graficar Cartas</button>
+        <p>Carta X</p>
+        <canvas id="chart-container_X" class="chart-container"></canvas>
+        <p>Carta R</p>
+        <canvas id="chart-container_R" class="chart-container"></canvas>
+        <p>Carta S</p>
+        <canvas id="chart-container_S" class="chart-container"></canvas>
+        <p>Carta X-S</p>
+        <canvas id="chart-container_XS" class="chart-container"></canvas>
+    </div>
+    <script src="estadisticos.js"></script>
+    <script src="graficos.js"></script>
 </body>
 </html>
